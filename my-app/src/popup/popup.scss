@@ -1,16 +1,12 @@
 .popup {
   display: flex;
-  width: 90vh;
+  width: 100vh;
   height: 500px;
   border-radius: 50px;
   background-color: bisque;
   align-items: center;
   justify-content: center;
-  position: fixed;
-  top: 25%;
-  left: 25%;
-  z-index: 50;
-  opacity: 1;
+  margin-top: 20px;
 
   &__title {
     font-family: cursive;
@@ -40,6 +36,7 @@
     cursor: pointer;
     transition: 0.3s;
   }
+
   &__button:hover {
     transition: 0.3s;
     background-color: #ff9f01;
@@ -52,4 +49,11 @@
     flex-direction: column;
     justify-content: space-between;
   }
+
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
