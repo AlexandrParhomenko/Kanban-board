@@ -1,0 +1,55 @@
+.popup {
+  display: flex;
+  width: 90vh;
+  height: 500px;
+  border-radius: 50px;
+  background-color: bisque;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 25%;
+  left: 25%;
+  z-index: 50;
+  opacity: 1;
+
+  &__title {
+    font-family: cursive;
+    font-size: 20px;
+  }
+
+  &__input {
+    background-color: initial;
+    border: none;
+    border-bottom: 2px solid #fff;
+    font-family: cursive;
+    font-size: 18px;
+    height: 25px;
+    outline: none;
+    text-align: center;
+    width: 30%;
+  }
+
+  &__button {
+    font-size: 15px;
+    font-family: cursive;
+    width: 100px;
+    background-color: #f5ce71;
+    border-radius: 10px;
+    border: 2px solid #dca63f;
+    height: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  &__button:hover {
+    transition: 0.3s;
+    background-color: #ff9f01;
+  }
+
+  &__content {
+    align-items: center;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}

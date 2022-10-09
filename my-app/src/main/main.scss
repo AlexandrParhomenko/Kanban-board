@@ -1,0 +1,64 @@
+.main {
+  display: flex;
+  padding-top: 20px;
+  width: 90%;
+  height: auto;
+  justify-content: space-evenly;
+
+}
+.table {
+  display: flex;
+  height: auto;
+  width: 250px;
+  background-color: white;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+  }
+
+  &__title {
+    font-family: cursive;
+    font-size: 17px;
+    color: #172b4d;
+  }
+
+  &__text {
+    font-family: cursive;
+    font-size: 15px;
+    color: #29487c;
+    width: 230px;
+    padding-left: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .add-card {
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .add-card:hover {
+    background-color: #d5cfcf;
+  }
+  .title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .edit-logo {
+    width: 25px;
+    height: 25px;
+    background-image: url("../assets/png/edit-icon.png");
+    background-size: contain;
+    cursor: pointer;
+  }
+  .edit-logo:hover {
+    background-color: #f0f1f5;
+    border-radius: 5px;
+  }
+}
