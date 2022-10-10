@@ -3,6 +3,7 @@
   padding: 20px 20px 0 20px;
   justify-content: space-evenly;
   width: 100%;
+  column-gap: 5px;
 }
 
 .table {
@@ -143,7 +144,8 @@
   left: 30%;
   z-index: 1;
   display: flex;
-  width: 70vh;
+  max-width: 70vh;
+  width: 100%;
   height: 700px;
   border-radius: 10px;
   background-color: #8ec5ea;
@@ -224,6 +226,7 @@
 }
 
 .delete {
+  margin-bottom: 15px;
   margin-top: 20px;
   border-radius: 3px;
   background-color: #d20d24;
@@ -256,16 +259,7 @@
   font-size: 18px;
 }
 
-.comment-author::before {
-  content: '';
-  height: 35px;
-  width: 35px;
-  background: url("../assets/jpg/profile.jpg");
-  background-size: cover;
-  position: absolute;
-  margin-left: -40px;
-  margin-top: 3px;
-}
+
 
 .comment-text {
   word-break: break-word;
@@ -296,6 +290,39 @@
 .comment-edit {
   display: flex;
   align-items: center;
+}
+
+.scroll-wrapper {
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  max-height: 60vh;
+  min-height: 160px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: auto;
+}
+
+.scroll-wrapper::-webkit-scrollbar {
+  background-color: initial;
+  height: 6px;
+  padding-top: 20px;
+  position: absolute;
+  top: 40px;
+  width: 6px;
+}
+.scroll-wrapper::-webkit-scrollbar-thumb {
+  background: #faebd7;
+  border-radius: 3px;
+  position: absolute;
+  top: 40px;
+}
+
+@media (max-width: 1000px) {
+  .card-popup {
+    top: 10%;
+    left: 5%;
+  }
 }
 
 

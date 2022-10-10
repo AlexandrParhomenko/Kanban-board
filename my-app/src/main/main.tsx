@@ -50,11 +50,17 @@ const Main = () => {
     localStorage.setItem('table', JSON.stringify(tables));
   })
 
-  window.addEventListener('keypress', function (e) {
-    if (e.key === 'Escape') {
-      setVisible([0])
+  const escapeCheck = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {setVisible([0])}
+  }
+
+  useEffect(() => {
+    window.addEventListener('keyup', escapeCheck)
+    return () => {
+      window.removeEventListener('keyup', escapeCheck)
     }
-  })
+  }, [])
+
 
   const editHandler = (name: string, id: number) => {
     return (
@@ -216,29 +222,35 @@ const Main = () => {
                                        placeholder='Write a comment...'/>
                                 <button onClick={() => comments.length > 0 ? postComment(table.id, id) : ''} className='add-button comment-button'>Post</button>
                               </div>
+                              <div className='scroll-wrapper'>
                               {el.comments.map((comment, idx) => <div key={idx} className='comment-body'>
-                                <span className='comment-author'>{comment.commentator}</span>
+                                <div style={{display: 'flex', alignItems: 'center', columnGap: '5px'}}>
+                                  <img src={require('../assets/jpg/profile.jpg')} height='20px' width='20px'/>
+                                  <span className='comment-author'>{comment.commentator}</span>
+                                </div>
+
                                 <div className='comment-wrapper'>
                                   {commentEdit > 0 && idx + 1 === commentEdit
                                       ? <div>
                                         <input onChange={(e) => {
-                                        setComments(e.target.value)}}
-                                                    autoFocus
-                                                    className='add-input comment-input'
-                                                    type='text'
-                                                    defaultValue={comment.comment}/>
+                                          setComments(e.target.value)}}
+                                               autoFocus
+                                               className='add-input comment-input'
+                                               type='text'
+                                               defaultValue={comment.comment}/>
                                         <button onClick={() => editCommentHandler(table.id, id, idx)}
                                                 className='add-button comment-button'>Save</button>
-                                        </div>
+                                      </div>
                                       : <span className='comment-text'>{comment.comment}</span>}
                                   {comment.commentator === author
                                       ? <div className='comment-edit'>
-                                          <img onClick={() => setCommentEdit(idx + 1)} style={{cursor: 'pointer'}} src={require('../assets/png/edit-icon.png')} height='30px' width='30px' alt='edit'/>
-                                          <span onClick={() => deleteComment(table.id, id, idx)} className='close-button'>X</span>
-                                        </div>
+                                        <img onClick={() => setCommentEdit(idx + 1)} style={{cursor: 'pointer'}} src={require('../assets/png/edit-icon.png')} height='30px' width='30px' alt='edit'/>
+                                        <span onClick={() => deleteComment(table.id, id, idx)} className='close-button'>X</span>
+                                      </div>
                                       : ''}
                                 </div>
                               </div>)}
+                              </div>
                               <button onClick={() => deleteCard(table.id, id)}
                                       className='add-button delete'>Delete card</button>
                             </div>
