@@ -15,7 +15,7 @@ const Popup: React.FC = () => {
         {visible && !localStorage.getItem('userName')
             ? <div className='popup'>
               <div className='popup__content'>
-                <span className='popup__title'>Приветствуем на Kanban-board. Пожалуйста введите ваше имя:</span>
+                <span className='popup__title'>Welcome to Kanban-board. Please enter your name:</span>
                 <input value={inputValue}
                        onChange={e => setInputValue(e.target.value)}
                        placeholder='Имя'
