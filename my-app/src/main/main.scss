@@ -91,8 +91,8 @@
 }
 
 .add-input {
+  width: 200px;
   height: 60px;
-  resize: none;
   font-size: 15px;
   font-family: cursive;
 }
@@ -144,7 +144,7 @@
   z-index: 1;
   display: flex;
   width: 70vh;
-  height: 500px;
+  height: 700px;
   border-radius: 10px;
   background-color: #8ec5ea;
   padding: 30px 0 0 50px
@@ -189,7 +189,6 @@
 }
 
 .card-content {
-  height: 130px;
   display: flex;
   flex-direction: column;
 }
@@ -240,6 +239,63 @@
   position: absolute;
   margin-left: -27px;
   margin-top: 3px;
+}
+
+.comment-input {
+  width: 300px;
+}
+
+.comment-body {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-author {
+  font-family: cursive;
+  font-size: 18px;
+}
+
+.comment-author::before {
+  content: '';
+  height: 35px;
+  width: 35px;
+  background: url("../assets/jpg/profile.jpg");
+  background-size: cover;
+  position: absolute;
+  margin-left: -40px;
+  margin-top: 3px;
+}
+
+.comment-text {
+  word-break: break-word;
+  padding: 7px;
+  flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  width: 300px;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid #858585;
+  font-family: Georgia, serif;
+  font-size: 15px;
+}
+
+.comment-button {
+  margin-left: 15px;
+  border-radius: 5px;
+  border-color: #858585;
+}
+
+.comment-wrapper {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
+}
+
+.comment-edit {
+  display: flex;
+  align-items: center;
 }
 
 
