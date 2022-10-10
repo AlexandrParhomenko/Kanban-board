@@ -13,15 +13,15 @@ const Popup: React.FC = () => {
   return (
       <div className='wrapper'>
         {visible && !localStorage.getItem('userName')
-            ? <div className='popup'>
+            ? <div className='popup login'>
               <div className='popup__content'>
                 <span className='popup__title'>Welcome to Kanban-board. Please enter your name:</span>
                 <input value={inputValue}
                        onChange={e => setInputValue(e.target.value)}
-                       placeholder='Имя'
+                       placeholder='Name'
                        className='popup__input'
                        type='text'/>
-                <button className='add__button'
+                <button className='popup__button'
                         onClick={clickHandler}
                 >Отправить
                 </button>

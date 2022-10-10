@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './header.scss'
 
 const Header = () => {
-  const [userName, setUserName] = useState<string>(localStorage.getItem('userName') || '')
+  const [userName, setUserName] = useState<string>('-')
 
   useEffect(() => {
     setUserName(localStorage.getItem('userName') || '-')
@@ -14,7 +14,9 @@ const Header = () => {
           <img src={require('../assets/png/header-logo.png')} height='50px' width='50px'
                alt='header-logo'/>
           <span className='header__text'>Kanban-board</span>
-          <span className='header__text'>Your name: {userName}</span>
+          {localStorage.getItem('userName')
+              ? <span className='header__text'>Your name: {userName}</span>
+              : ''}
         </div>
       </header>
   );

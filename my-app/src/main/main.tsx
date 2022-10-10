@@ -13,6 +13,7 @@ const Main = () => {
   const [description, setDescription] = useState<string>('')
   const [comments, setComments] = useState<string>('')
   const [author, setAuthor] = useState<string>('')
+  const input = document.querySelectorAll('input')
   const [tables, setTables] = useState([
     {id: 1, name: 'TODO', cards: []},
     {id: 2, name: 'In progress', cards: [
@@ -38,8 +39,16 @@ const Main = () => {
   }
 
   useEffect(() => {
+    const table = localStorage.getItem('table')
+    if (table) {
+      setTables(JSON.parse(table))
+    }
     setAuthor(localStorage.getItem('userName') || '')
   }, [])
+
+  window.addEventListener('beforeunload', function () {
+    localStorage.setItem('table', JSON.stringify(tables));
+  })
 
   window.addEventListener('keypress', function (e) {
     if (e.key === 'Escape') {
@@ -55,7 +64,10 @@ const Main = () => {
     )
   }
 
-
+  const editClose = () => {
+    setCardEdit(0)
+    input.forEach(el => el.value = '')
+  }
 
   const cardEditHandler = (cardName: string, id: number, cardId: number) => {
     return (
@@ -69,7 +81,7 @@ const Main = () => {
                  }}/>
           <div style={{display: 'flex', alignItems: 'center'}}>
             <button onClick={() => cardEdit1(id, cardId)} className='add-button'>Save</button>
-            <button onClick={() => setCardEdit(0)} className='close-button'>X</button>
+            <button onClick={() => editClose()} className='close-button'>X</button>
           </div>
         </div>
     )
@@ -88,36 +100,46 @@ const Main = () => {
   }
 
   const cardEdit1 = (tableId: number, cardId: number) => {
-    const cardList = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {...card, name: name} : card)
-    setTables(tables.map(table => table.id === tableId ? {...table, cards: cardList} : table))
-    setCardEdit(0)
+    if (name.length > 0) {
+      const cardList = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {...card, name: name} : card)
+      setTables(tables.map(table => table.id === tableId ? {...table, cards: cardList} : table))
+      setCardEdit(0)
+    }
   }
 
   const postComment = (tableId: number, cardId: number) => {
     const dsa = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {...card, comments: [...card.comments, newComment]} : card)
     setTables(tables.map(tab => tab.id === tableId ? {...tab, cards: dsa} : tab))
+    input.forEach(el => el.value = '')
+    setComments('')
   }
 
   const descriptionEditHandle = (tableId: number, cardId: number) => {
     const dsa = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {...card, description: description} : card)
     setTables(tables.map(tab => tab.id === tableId ? {...tab, cards: dsa} : tab))
-    setDescription('')
     setDescriptionEdit(0)
+    setDescription('')
   }
 
   const editCommentHandler = (tableId: number, cardId: number, commentId: number) => {
     const dsa = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {...card, comments: [...card.comments]} : card)
-    //setTables(tables.map(tab => tab.id === tableId ? {...tab, cards: dsa} : tab))
     dsa[0].comments[commentId].comment = comments
-    console.log(tables)
     setCommentEdit(0)
+  }
+
+  const closeHandle = () => {
+    setAdd(0);
+    setName('')
   }
 
   const addHandler = (id: number) => {
 
     const add = () => {
-      setTables(tables.map(tab => tab.id === id ? {...tab, cards: [...tab.cards, newCard]} : tab))
-      setAdd(0)
+      if (name.length > 0) {
+        setTables(tables.map(tab => tab.id === id ? {...tab, cards: [...tab.cards, newCard]} : tab))
+        setAdd(0)
+      }
+      setName('')
     }
 
     return (
@@ -134,7 +156,7 @@ const Main = () => {
                 onClick={() => add()}
                 className='add-button'>Add card
             </button>
-            <button onClick={() => setAdd(0)} className='close-button'>X</button>
+            <button onClick={() => closeHandle()} className='close-button'>X</button>
           </div>
         </div>
     )
@@ -143,7 +165,7 @@ const Main = () => {
   return (
       <div className='main'>
         {tables.map((table, idx) =>
-            <div className='table'>
+            <div key={table.id} className='table'>
               <div className='table__content'>
                 <div className='title-wrapper'>
                   {edit === table.id
@@ -154,7 +176,7 @@ const Main = () => {
                   </div>
                 </div>
                 {table.cards.map((el, id) =>
-                    <div>
+                    <div key={id}>
                       {visible[0] === id + 1 && visible[1] === idx + 1
                           ? <div className='card-popup'>
                             <button className='close-button btn'
@@ -192,12 +214,12 @@ const Main = () => {
                                        className='add-input comment-input'
                                        type='text'
                                        placeholder='Write a comment...'/>
-                                <button onClick={() => postComment(table.id, id)} className='add-button comment-button'>Post</button>
+                                <button onClick={() => comments.length > 0 ? postComment(table.id, id) : ''} className='add-button comment-button'>Post</button>
                               </div>
-                              {el.comments.map((comment, idx) => <div className='comment-body'>
+                              {el.comments.map((comment, idx) => <div key={idx} className='comment-body'>
                                 <span className='comment-author'>{comment.commentator}</span>
                                 <div className='comment-wrapper'>
-                                  {commentEdit > 0 && idx === commentEdit
+                                  {commentEdit > 0 && idx + 1 === commentEdit
                                       ? <div>
                                         <input onChange={(e) => {
                                         setComments(e.target.value)}}
@@ -211,7 +233,7 @@ const Main = () => {
                                       : <span className='comment-text'>{comment.comment}</span>}
                                   {comment.commentator === author
                                       ? <div className='comment-edit'>
-                                          <img onClick={() => setCommentEdit(idx)} style={{cursor: 'pointer'}} src={require('../assets/png/edit-icon.png')} height='30px' width='30px' alt='edit'/>
+                                          <img onClick={() => setCommentEdit(idx + 1)} style={{cursor: 'pointer'}} src={require('../assets/png/edit-icon.png')} height='30px' width='30px' alt='edit'/>
                                           <span onClick={() => deleteComment(table.id, id, idx)} className='close-button'>X</span>
                                         </div>
                                       : ''}
