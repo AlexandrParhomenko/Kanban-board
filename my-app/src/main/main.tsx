@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './main.scss'
 import '../popup/popup.scss'
+import {tableType} from "../types/types";
 
 const Main = () => {
   const [edit, setEdit] = useState<number>(0)
@@ -14,14 +15,9 @@ const Main = () => {
   const [comments, setComments] = useState<string>('')
   const [author, setAuthor] = useState<string>('')
   const input = document.querySelectorAll('input')
-  const [tables, setTables] = useState([
+  const [tables, setTables] = useState<tableType[]>([
     {id: 1, name: 'TODO', cards: []},
-    {id: 2, name: 'In progress', cards: [
-        {name: 'sad', description: 'asd', comments: [
-            {comment: 'sda', commentator: 'das'},
-            {comment: 'as', commentator: 'ff'}
-          ], author: 'asd'},
-      ]},
+    {id: 2, name: 'In progress', cards: []},
     {id: 3, name: 'Testing', cards: []},
     {id: 4, name: 'Done', cards: []},
   ])
@@ -51,7 +47,9 @@ const Main = () => {
   })
 
   const escapeCheck = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {setVisible([0])}
+    if (e.key === 'Escape') {
+      setVisible([0])
+    }
   }
 
   useEffect(() => {
@@ -107,28 +105,40 @@ const Main = () => {
 
   const cardEdit1 = (tableId: number, cardId: number) => {
     if (name.length > 0) {
-      const cardList = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {...card, name: name} : card)
+      const cardList = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {
+        ...card,
+        name: name
+      } : card)
       setTables(tables.map(table => table.id === tableId ? {...table, cards: cardList} : table))
       setCardEdit(0)
     }
   }
 
   const postComment = (tableId: number, cardId: number) => {
-    const dsa = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {...card, comments: [...card.comments, newComment]} : card)
+    const dsa = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {
+      ...card,
+      comments: [...card.comments, newComment]
+    } : card)
     setTables(tables.map(tab => tab.id === tableId ? {...tab, cards: dsa} : tab))
     input.forEach(el => el.value = '')
     setComments('')
   }
 
   const descriptionEditHandle = (tableId: number, cardId: number) => {
-    const dsa = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {...card, description: description} : card)
+    const dsa = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {
+      ...card,
+      description: description
+    } : card)
     setTables(tables.map(tab => tab.id === tableId ? {...tab, cards: dsa} : tab))
     setDescriptionEdit(0)
     setDescription('')
   }
 
   const editCommentHandler = (tableId: number, cardId: number, commentId: number) => {
-    const dsa = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {...card, comments: [...card.comments]} : card)
+    const dsa = tables[tableId - 1].cards.map((card, idx) => idx === cardId ? {
+      ...card,
+      comments: [...card.comments]
+    } : card)
     dsa[0].comments[commentId].comment = comments
     setCommentEdit(0)
   }
@@ -197,7 +207,8 @@ const Main = () => {
                               <span className='popup-text'>in the <b>{table.name}</b> column</span>
                               <span className='popup-text'>created by <b>{el.author}</b></span>
                               <div className='description-wrapper'>
-                                <span onClick={() => setDescriptionEdit(table.id)} className='popup__title description'>Description</span>
+                                <span onClick={() => setDescriptionEdit(table.id)}
+                                      className='popup__title description'>Description</span>
                                 {el.description.length > 1 && descriptionEdit === 0
                                     ? <span className='popup-text'>{el.description}</span>
                                     : <div className='description-wrapper'>
@@ -206,53 +217,72 @@ const Main = () => {
                                              className='add-input'
                                              placeholder='Enter a description'
                                              onChange={(e) => {
-                                                    setDescription(e.target.value)
-                                                  }}/>
+                                               setDescription(e.target.value)
+                                             }}/>
                                       <button onClick={() => descriptionEditHandle(table.id, id)}
-                                              className='add-button'>Save</button>
+                                              className='add-button'>Save
+                                      </button>
                                     </div>
                                 }
                               </div>
                               <span className='popup__title comment'>Comments</span>
                               <div>
                                 <input onChange={(e) => {
-                                  setComments(e.target.value)}}
+                                  setComments(e.target.value)
+                                }}
                                        className='add-input comment-input'
                                        type='text'
                                        placeholder='Write a comment...'/>
-                                <button onClick={() => comments.length > 0 ? postComment(table.id, id) : ''} className='add-button comment-button'>Post</button>
+                                <button
+                                    onClick={() => comments.length > 0 ? postComment(table.id, id) : ''}
+                                    className='add-button comment-button'>Post
+                                </button>
                               </div>
                               <div className='scroll-wrapper'>
-                              {el.comments.map((comment, idx) => <div key={idx} className='comment-body'>
-                                <div style={{display: 'flex', alignItems: 'center', columnGap: '5px'}}>
-                                  <img src={require('../assets/jpg/profile.jpg')} height='20px' width='20px'/>
-                                  <span className='comment-author'>{comment.commentator}</span>
-                                </div>
+                                {el.comments.map((comment, idx) => <div key={idx}
+                                                                        className='comment-body'>
+                                  <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    columnGap: '5px'
+                                  }}>
+                                    <img src={require('../assets/jpg/profile.jpg')} height='20px'
+                                         width='20px'/>
+                                    <span className='comment-author'>{comment.commentator}</span>
+                                  </div>
 
-                                <div className='comment-wrapper'>
-                                  {commentEdit > 0 && idx + 1 === commentEdit
-                                      ? <div>
-                                        <input onChange={(e) => {
-                                          setComments(e.target.value)}}
-                                               autoFocus
-                                               className='add-input comment-input'
-                                               type='text'
-                                               defaultValue={comment.comment}/>
-                                        <button onClick={() => editCommentHandler(table.id, id, idx)}
-                                                className='add-button comment-button'>Save</button>
-                                      </div>
-                                      : <span className='comment-text'>{comment.comment}</span>}
-                                  {comment.commentator === author
-                                      ? <div className='comment-edit'>
-                                        <img onClick={() => setCommentEdit(idx + 1)} style={{cursor: 'pointer'}} src={require('../assets/png/edit-icon.png')} height='30px' width='30px' alt='edit'/>
-                                        <span onClick={() => deleteComment(table.id, id, idx)} className='close-button'>X</span>
-                                      </div>
-                                      : ''}
-                                </div>
-                              </div>)}
+                                  <div className='comment-wrapper'>
+                                    {commentEdit > 0 && idx + 1 === commentEdit
+                                        ? <div>
+                                          <input onChange={(e) => {
+                                            setComments(e.target.value)
+                                          }}
+                                                 autoFocus
+                                                 className='add-input comment-input'
+                                                 type='text'
+                                                 defaultValue={comment.comment}/>
+                                          <button
+                                              onClick={() => editCommentHandler(table.id, id, idx)}
+                                              className='add-button comment-button'>Save
+                                          </button>
+                                        </div>
+                                        : <span className='comment-text'>{comment.comment}</span>}
+                                    {comment.commentator === author
+                                        ? <div className='comment-edit'>
+                                          <img onClick={() => setCommentEdit(idx + 1)}
+                                               style={{cursor: 'pointer'}}
+                                               src={require('../assets/png/edit-icon.png')}
+                                               height='30px' width='30px' alt='edit'/>
+                                          <span onClick={() => deleteComment(table.id, id, idx)}
+                                                className='close-button'>X</span>
+                                        </div>
+                                        : ''}
+                                  </div>
+                                </div>)}
                               </div>
                               <button onClick={() => deleteCard(table.id, id)}
-                                      className='add-button delete'>Delete card</button>
+                                      className='add-button delete'>Delete card
+                              </button>
                             </div>
                           </div>
                           : ''}
